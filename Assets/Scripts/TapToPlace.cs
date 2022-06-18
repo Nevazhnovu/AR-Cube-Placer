@@ -37,7 +37,7 @@ public class TapToPlace : MonoBehaviour
 
     bool TryGetTouchPosition(out Vector2 touchPosition)
     {
-        if (Input.touchCount > 0 && !EventSystem.current.IsPointerOverGameObject())
+        if (!ClickBlocker.isBlocked && Input.touchCount > 0 && !EventSystem.current.IsPointerOverGameObject())
         {
             touchPosition = Input.GetTouch(0).position;
             return true;
