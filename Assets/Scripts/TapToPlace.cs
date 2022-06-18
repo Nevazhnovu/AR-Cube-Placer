@@ -8,7 +8,6 @@ using UnityEngine.XR.ARSubsystems;
 
 public class TapToPlace : MonoBehaviour
 {
-
     [SerializeField] private Slider sizeSlider;
     
     static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
