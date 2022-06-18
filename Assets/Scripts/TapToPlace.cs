@@ -1,11 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
 public class TapToPlace : MonoBehaviour
 {
+
+    [SerializeField] private Slider sizeSlider;
+    
     static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
 
     ARRaycastManager m_RaycastManager;
@@ -33,7 +38,7 @@ public class TapToPlace : MonoBehaviour
 
     bool TryGetTouchPosition(out Vector2 touchPosition)
     {
-        if (Input.touchCount > 0)
+        if (Input.touchCount > 0 && !EventSystem.current.IsPointerOverGameObject())
         {
             touchPosition = Input.GetTouch(0).position;
             return true;
@@ -44,8 +49,8 @@ public class TapToPlace : MonoBehaviour
 
     void Update()
     {
-        if (!TryGetTouchPosition(out Vector2 touchPosition))
-            return;
+        if (!TryGetTouchPosition(out Vector2 touchPosition)) return;
+        
         if (m_RaycastManager.Raycast(touchPosition, s_Hits, TrackableType.PlaneWithinPolygon))
         {
             // Raycast hits are sorted by distance, so the first one
@@ -54,6 +59,12 @@ public class TapToPlace : MonoBehaviour
             TrackableId planeId = s_Hits[0].trackableId; //get the ID of the plane hit by the raycast
             var referencePoint = m_ReferencePointManager.AttachAnchor(m_PlaneManager.GetPlane(planeId), hitPose);
 
+            print(">>> referencePoint= " + referencePoint.gameObject.ToString());
+            referencePoint.transform.localScale = new Vector3(
+                x: sizeSlider.value,
+                y: sizeSlider.value,
+                z: sizeSlider.value );
+                
             if (referencePoint != null)
             {
                 RemoveAllReferencePoints();
