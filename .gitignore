@@ -7,6 +7,9 @@
 !/[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
+/Assets/USED/
+
+*.meta
 
 # Visual Studio cache directory
 .vs/
