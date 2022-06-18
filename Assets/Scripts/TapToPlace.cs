@@ -62,6 +62,7 @@ public class TapToPlace : MonoBehaviour
 
     void Update()
     {
+        if(m_PlaneManager == null || !m_PlaneManager.isActiveAndEnabled) return;
         if (!TryGetTouchPosition(out Vector2 touchPosition)) return;
         
         if (m_RaycastManager.Raycast(touchPosition, s_Hits, TrackableType.PlaneWithinPolygon))
@@ -89,9 +90,10 @@ public class TapToPlace : MonoBehaviour
 
     void ChangeObjectSize(ARAnchor referencePoint, float value)
     {
-        referencePoint.transform.localScale = new Vector3(
-            x: value,
-            y: value,
-            z: value);
+        if(referencePoint != null && referencePoint.isActiveAndEnabled)
+            referencePoint.transform.localScale = new Vector3(
+                x: value,
+                y: value,
+                z: value);
     }
 }
