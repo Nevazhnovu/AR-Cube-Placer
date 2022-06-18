@@ -17,12 +17,20 @@ public class TapToPlace : MonoBehaviour
     List<ARAnchor> m_ReferencePoint;
     ARPlaneManager m_PlaneManager;
 
+    private ARAnchor objectAnchor;
+
     void Awake()
     {
         m_RaycastManager = GetComponent<ARRaycastManager>();
         m_ReferencePointManager = GetComponent<ARAnchorManager>();
         m_PlaneManager = GetComponent<ARPlaneManager>();
         m_ReferencePoint = new List<ARAnchor>();
+        sizeSlider.onValueChanged.AddListener(OnSliderSizeChange);
+    }
+
+    void OnSliderSizeChange(float value)
+    {
+        ChangeObjectSize(objectAnchor, sizeSlider.value);
     }
     
     //Remove all reference points created
@@ -57,18 +65,27 @@ public class TapToPlace : MonoBehaviour
             var hitPose = s_Hits[0].pose;
             TrackableId planeId = s_Hits[0].trackableId; //get the ID of the plane hit by the raycast
             var referencePoint = m_ReferencePointManager.AttachAnchor(m_PlaneManager.GetPlane(planeId), hitPose);
+            objectAnchor = referencePoint;
+            
+            if (sizeSlider.isActiveAndEnabled)
+            { 
+                print(">>> referencePoint= " + referencePoint.gameObject);
+                ChangeObjectSize(referencePoint, sizeSlider.value);
+            }
 
-            print(">>> referencePoint= " + referencePoint.gameObject.ToString());
-            referencePoint.transform.localScale = new Vector3(
-                x: sizeSlider.value,
-                y: sizeSlider.value,
-                z: sizeSlider.value );
-                
             if (referencePoint != null)
             {
                 RemoveAllReferencePoints();
                 m_ReferencePoint.Add(referencePoint);
             }
         }
+    }
+
+    void ChangeObjectSize(ARAnchor referencePoint, float value)
+    {
+        referencePoint.transform.localScale = new Vector3(
+            x: value,
+            y: value,
+            z: value);
     }
 }
