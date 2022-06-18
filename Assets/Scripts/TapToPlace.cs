@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,6 +27,11 @@ public class TapToPlace : MonoBehaviour
         m_PlaneManager = GetComponent<ARPlaneManager>();
         m_ReferencePoint = new List<ARAnchor>();
         sizeSlider.onValueChanged.AddListener(OnSliderSizeChange);
+    }
+
+    private void OnDestroy()
+    {
+        sizeSlider.onValueChanged.RemoveListener(OnSliderSizeChange);
     }
 
     void OnSliderSizeChange(float value)
