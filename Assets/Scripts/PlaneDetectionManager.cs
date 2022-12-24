@@ -26,6 +26,8 @@ public class PlaneDetectionManager : MonoBehaviour
 
     private void SetButtonState(bool enabled)
     {
+        print(">>> SetButtonState " + enabled);
+
         if (enabled)
         {
             var clr = new Color32(116, 238, 69, 255);
